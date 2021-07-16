@@ -1,3 +1,10 @@
+# scala
+
+/out
+/.bloop
+/.metals
+
+# python
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
