@@ -111,8 +111,16 @@ def main(span_model_path: str,
          question_min_prob: float,
          question_beam_size: int) -> None:
     check_for_gpu(cuda_device)
-    span_model_archive = load_archive_from_folder(span_model_path, cuda_device = cuda_device, weights_file = os.path.join(span_model_path, "best.th"))
-    span_to_question_model_archive = load_archive_from_folder(span_to_question_model_path, cuda_device = cuda_device, weights_file = os.path.join(span_to_question_model_path, "best.th"))
+    span_model_archive = load_archive(
+        span_model_path,
+        cuda_device = cuda_device,
+        # weights_file = os.path.join(span_model_path, "best.th")
+        )
+    span_to_question_model_archive = load_archive(
+        span_to_question_model_path,
+        cuda_device = cuda_device,
+        # weights_file = os.path.join(span_to_question_model_path, "best.th")
+        )
     pipeline = AFirstPipeline(
         span_model = span_model_archive.model,
         span_model_dataset_reader = DatasetReader.from_params(span_model_archive.config["dataset_reader"].duplicate()),

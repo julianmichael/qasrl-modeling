@@ -28,6 +28,10 @@ the various settings covered by the config generator. Only a few are provided be
 of the best models for a lot of configurations, since the training was done quite a while ago. If
 you make any changes or train more models, please contribute them!
 
+NOTE: a config ([models/span_binary.json]) is provided for binary classification on spans which I
+think should perform well, but I haven't trained and I don't have the results for hyperparameter
+optimization in that setting anymore. But training that would be a good starting point.
+
 ## Setup
 
 At the moment, this repository needs Python version 3.8. Be aware that this is not the newest
@@ -68,7 +72,7 @@ example, to run a span detection -> question generation pipeline, I might invoke
 python qasrl/pipelines/afirst_pipeline_sequential.py \
   --span models/span_density_softmax.tar.gz \
   --span_to_question models/span_to_question.tar.gz \
-  --cuda-device 0 \
+  --cuda_device 0 \
   --span_min_prob 0.02 \
   --question_min_prob 0.01 \
   --question_beam_size 20 \

@@ -146,18 +146,20 @@ def main(span_model_path: str,
 
     check_for_gpu(cuda_device)
 
-    span_model_archive = load_archive_from_folder(
+    span_model_archive = load_archive(
         span_model_path,
         cuda_device = cuda_device,
         overrides = '{ "model": { "span_selector": {"span_decoding_threshold": 0.00} } }',
-        weights_file = os.path.join(span_model_path, "best.th"))
+        # weights_file = os.path.join(span_model_path, "best.th")
+        )
 
     # override span detection threshold to be low enough so we can reasonably approximate bad spans
     # as having probability 0.
-    span_to_question_model_archive = load_archive_from_folder(
+    span_to_question_model_archive = load_archive(
         span_to_question_model_path,
         cuda_device = cuda_device,
-        weights_file = os.path.join(span_to_question_model_path, "best.th"))
+        # weights_file = os.path.join(span_to_question_model_path, "best.th")
+        )
 
     span_model_dataset_reader_params = span_model_archive.config["dataset_reader"].duplicate()
     span_model_dataset_reader_params["qasrl_filter"]["allow_all"] = True

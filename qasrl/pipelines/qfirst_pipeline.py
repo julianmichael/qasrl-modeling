@@ -220,11 +220,31 @@ def main(question_model_path: str,
     check_for_gpu(cuda_device)
     print("Loading models...", flush = True)
     pipeline = QFirstPipeline(
-        question_model_archive = load_archive_from_folder(question_model_path, cuda_device = cuda_device, weights_file = os.path.join(question_model_path, "best.th")),
-        question_to_span_model_archive = load_archive_from_folder(question_to_span_model_path, cuda_device = cuda_device, weights_file = os.path.join(question_to_span_model_path, "best.th")),
-        tan_model_archive = load_archive_from_folder(tan_model_path, cuda_device = cuda_device, weights_file = os.path.join(tan_model_path, "best.th")) if tan_model_path is not None else None,
-        span_to_tan_model_archive = load_archive_from_folder(span_to_tan_model_path, cuda_device = cuda_device, weights_file = os.path.join(span_to_tan_model_path, "best.th")) if span_to_tan_model_path is not None else None,
-        animacy_model_archive = load_archive_from_folder(animacy_model_path, cuda_device = cuda_device, weights_file = os.path.join(animacy_model_path, "best.th")) if animacy_model_path is not None else None,
+        question_model_archive = load_archive(
+            question_model_path,
+            cuda_device = cuda_device,
+            # weights_file = os.path.join(question_model_path, "best.th")
+            ),
+        question_to_span_model_archive = load_archive(
+            question_to_span_model_path,
+            cuda_device = cuda_device,
+            # weights_file = os.path.join(question_to_span_model_path, "best.th")
+            ),
+        tan_model_archive = load_archive(
+            tan_model_path,
+            cuda_device = cuda_device,
+            # weights_file = os.path.join(tan_model_path, "best.th")
+            ) if tan_model_path is not None else None,
+        span_to_tan_model_archive = load_archive(
+            span_to_tan_model_path,
+            cuda_device = cuda_device,
+            # weights_file = os.path.join(span_to_tan_model_path, "best.th")
+            ) if span_to_tan_model_path is not None else None,
+        animacy_model_archive = load_archive(
+            animacy_model_path,
+            cuda_device = cuda_device,
+            # weights_file = os.path.join(animacy_model_path, "best.th")
+            ) if animacy_model_path is not None else None,
         question_minimum_threshold = question_min_prob,
         span_minimum_threshold = span_min_prob,
         tan_minimum_threshold = tan_min_prob,
