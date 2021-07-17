@@ -28,9 +28,10 @@ the various settings covered by the config generator. Only a few are provided be
 of the best models for a lot of configurations, since the training was done quite a while ago. If
 you make any changes or train more models, please contribute them!
 
-NOTE: a config ([models/span_binary.json]) is provided for binary classification on spans which I
-think should perform well, but I haven't trained and I don't have the results for hyperparameter
-optimization in that setting anymore. But training that would be a good starting point.
+NOTE: a config ([models/span_binary.json](models/span_binary.json)) is provided for binary
+classification on spans which I think should perform well, but I haven't trained and I don't have
+the results for hyperparameter optimization in that setting anymore. But training that would be a
+good starting point.
 
 ## Setup
 
