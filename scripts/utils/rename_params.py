@@ -2,6 +2,8 @@ import torch, argparse
 # import os, json, tarfile, uuid, shutil
 from collections import OrderedDict
 
+# Modified from https://gist.github.com/the-bass/0bf8aaa302f9ba0d26798b11e4dd73e3
+
 def rename_state_dict_keys(source, key_transformation, target=None):
     """
     source             -> Path to the saved state dict.
