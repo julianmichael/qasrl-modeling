@@ -58,6 +58,8 @@ downloads = [
     ),
 ]
 
+a = ord('a')
+
 def get_download_option_prompt(num, download):
     if os.path.exists(download.path):
         color = "\u001b[32m"
@@ -66,7 +68,7 @@ def get_download_option_prompt(num, download):
         color = "\u001b[33m"
         icon  = "[not downloaded]"
 
-    letter = chr(num + 97)
+    letter = chr(num + a)
 
     desc = ("\n" + download.description).replace("\n", "\n     ")
 
@@ -81,30 +83,23 @@ def construct_prompt():
 
 def download_item(download):
     print("Downloading {}.".format(download.name))
-    if len(choice.ext) > 0 and choice.should_untar:
-       tarpath = choice.path + choice.ext
-       urllib.request.urlretrieve(choice.url, tarpath, show_progress)
+    if len(download.ext) > 0 and download.should_untar:
+       tarpath = download.path + download.ext
+       urllib.request.urlretrieve(download.url, tarpath, show_progress)
        result = tarfile.open(tarpath)
-       result.extractall(os.path.dirname(choice.path))
+       result.extractall(os.path.dirname(download.path))
        result.close()
        os.remove(tarpath)
     else:
-       urllib.request.urlretrieve(choice.url, choice.path, show_progress)
+       urllib.request.urlretrieve(download.url, download.path, show_progress)
     print("\nDownload complete: {}".format(download.path))
 
-a = ord('a')
-
 should_refresh_prompt = True
-while True:
-    if should_refresh_prompt:
-        print(construct_prompt())
-    optstr = "".join([chr(i) for i in range(a, a + len(downloads))])
-    print("Choose a subset ({}/*/q): ".format(optstr), end='')
+
+def download_items(spec):
     should_refresh_prompt = False
-    response = input()
-    if "quit".startswith(response.lower()):
-        break
-    elif response.lower() == "*":
+    print(spec)
+    if spec.lower() in ["*", "all"]:
         for i, download in enumerate(downloads):
             print("{}) {}".format(chr(i + a), download.description))
             if os.path.exists(download.path):
@@ -112,11 +107,11 @@ while True:
             else:
                 download_item(download)
     else:
-        for c in response:
+        for c in spec:
             try:
                 choice = downloads[ord(c) - a]
             except ValueError or IndexError:
-                print("Invalid option: {}".format(response))
+                print("Invalid option: {}".format(spec))
                 continue
             if os.path.exists(choice.path):
                 print("Already downloaded at {}.".format(choice.path))
@@ -129,3 +124,18 @@ while True:
             else:
                 download_item(choice)
                 should_refresh_prompt = True
+
+
+if len(sys.argv) > 1:
+    download_items(sys.argv[1])
+else:
+    while True:
+        if should_refresh_prompt:
+            print(construct_prompt())
+        optstr = "".join([chr(i) for i in range(a, a + len(downloads))])
+        print("Choose a subset ({}/all/q): ".format(optstr), end='')
+        spec = input()
+        if "quit".startswith(spec.lower()):
+            break
+        else:
+            download_items(spec)
