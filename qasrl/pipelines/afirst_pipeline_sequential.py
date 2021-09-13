@@ -43,6 +43,36 @@ question_beam_size_default = 20
 
 # Modifies original pipeline to output a hierarchical representation of the beam (span -> question).
 class AFirstPipelineSequential():
+    """
+    Span -> question pipeline. Outputs a sentence per line as a JSON object.
+    The output format for each sentence is:
+    {
+        "sentenceId": String,
+        "sentenceTokens": List[String],
+        "verbs": List[{
+            "verbIndex": Int,
+            "verbInflectedForms": { "stem": String, ... } # same as QA-SRL verb inflected forms
+            "beam": Beam
+        }]
+    }
+    where the sentenceId, tokens, and indices of each verb (predicate) are taken from the input
+    (which is expected to have these in the QA-SRL Bank 2.0 format). Inflected forms are only
+    included in the output if they are found in the input (as they will be when running directly on
+    the QA-SRL Bank). The "Beam" object contains the model predictions, and is formatted as follows:
+    Beam: List[{
+        "span": [Int, Int], # [beginning (inclusive), end (exclusive)] formatted as a 2-element list
+        "spanProb": Float, # the probability assigned to the span by the span detection model
+        "questions": List[{
+            "questionSlots": QuestionSlots, # JSON object with question slots, in QA-SRL Bank format
+            "questionProb": Float # probability assigned to the question by the question gen model
+        }]
+    }]
+    The beam will contain an entry for every span that receives a probability above the
+    `span_minimum_threshold` argument as well as any spans that were already provided in the input
+    JSON. The "questions" field for each span will contain an entry for every question output during
+    beam search. The beam has a size cutoff of `question_beam_size` and a probability cutoff of
+    `question_minimum_threshold`.
+    """
     def __init__(self,
                  span_model: SpanModel,
                  span_model_dataset_reader: QasrlReader,
@@ -125,10 +155,11 @@ class AFirstPipelineSequential():
                             "spanProb": span_prob,
                             "questions": scored_questions
                         })
-                verb_dicts.append({
-                    "verbIndex": verb_instance["metadata"]["verb_index"],
-                    "beam": beam
-                })
+                verb_entry = {"verbIndex": verb_instance["metadata"]["verb_index"]}
+                if "verb_inflected_forms" in verb_instance["metadata"]:
+                    verb_entry["verbInflectedForms"] = verb_instance["metadata"]["verb_inflected_forms"]
+                verb_entry["beam"] = beam
+                verb_dicts.append(verb_entry)
         return {
             "sentenceId": inputs["sentenceId"],
             "sentenceTokens": inputs["sentenceTokens"],
