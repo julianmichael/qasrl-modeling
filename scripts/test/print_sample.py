@@ -4,7 +4,8 @@ from tqdm import tqdm
 import sys
 
 def render_question(inflected_forms, question_slots):
-    verb_slot = question_slots["verb"]
+    # need 'pastParticiple' to be replaced before 'past' since 'past' is a substring of it...
+    verb_slot = question_slots["verb"].replace("pastParticiple", inflected_forms["pastParticiple"])
     for inflection, form in inflected_forms.items():
         verb_slot = verb_slot.replace(inflection, form)
     q = question_slots
