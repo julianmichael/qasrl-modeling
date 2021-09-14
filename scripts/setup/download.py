@@ -1,5 +1,3 @@
-#!/bin/python3
-# Requires Python 3
 
 from collections import namedtuple
 import os.path
@@ -7,6 +5,7 @@ import urllib.request
 import sys
 import time
 import tarfile
+from textwrap import TextWrapper
 
 # copied from:
 # https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
@@ -25,8 +24,19 @@ def show_progress(count, block_size, total_size):
 
 Download = namedtuple('Download', ['name', 'path', 'url', 'ext', 'description', 'should_untar'])
 
+wrapper = TextWrapper(width=80, initial_indent="     ", subsequent_indent="     ")
 
 downloads = [
+    Download(
+        name = 'span model (binary classification)',
+        path = 'models/span_binary.tar.gz',
+        url = 'https://www.dropbox.com/s/jpu992r4umvlnq3/span_binary.tar.gz?dl=1',
+        ext = '',
+        description = "Span detector model matching the design of that in FitzGerald et al. (2018)."
+        " Performs binary classification over each span, trained to predict whether the answer was provided"
+        " for a predicate by any annotator.",
+        should_untar = False,
+    ),
     Download(
         name = 'span model (probability density)',
         path = 'models/span_density_softmax.tar.gz',
@@ -70,7 +80,7 @@ def get_download_option_prompt(num, download):
 
     letter = chr(num + a)
 
-    desc = ("\n" + download.description).replace("\n", "\n     ")
+    desc = ("\n" + "\n".join(wrapper.wrap(download.description)))
 
     return u"  {}) {}{} {}\u001b[0m ".format(letter, color, download.name, icon) + desc + "\n"
 
