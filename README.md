@@ -77,6 +77,27 @@ python qasrl/pipelines/afirst_pipeline_sequential.py \
 ```
 which will write complete model predictions at `out.jsonl`.
 
+#### Input file format
+
+The format of the input file should be jsonl, where each sentence has a dictionary
+ representing him. The must-have keys are "sentenceId", "sentenceTokens", "verbEntries".
+
+So for the sentence "Both occur suddenly.", The representive json should look as
+  follows:
+
+```json
+{"sentenceId":"1",
+"sentenceTokens":["Both","occur","suddenly","."],
+"verbEntries":{"1":{"verbIndex":1,"verbInflectedForms":{"stem":"occur","presentSingular3rd":"occurs","presentParticiple":"occurring","past":"occurred","pastParticiple":"occurred"}}}}
+```
+
+1. "sentenceId": Is copied as is to the output file.
+2. "sentenceTokens": Its value is a list of the sentence's tokens.
+3. "verbEntries": Its value is a dictionary, where each key is a string representing
+ the index of a verb token in the sentence, and the inner dict should include verbIndex
+  (as an integer), and verbInflectedForms.
+ 
+
 ### Hyperparameter tuning
 
 To do hyperparameter tuning, first you generate the config files for all hyperparameter settings.
