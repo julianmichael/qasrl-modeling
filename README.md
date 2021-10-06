@@ -80,7 +80,7 @@ which will write complete model predictions at `out.jsonl`.
 #### Input file format
 
 The format of the input file should be jsonl, where each sentence has a dictionary
- representing him. The must-have keys are "sentenceId", "sentenceTokens", "verbEntries".
+ representing it. The must-have keys are "sentenceId", "sentenceTokens", "verbEntries".
 
 So for the sentence "Both occur suddenly.", The representive json should look as
   follows:
@@ -96,7 +96,9 @@ So for the sentence "Both occur suddenly.", The representive json should look as
 3. "verbEntries": Its value is a dictionary, where each key is a string representing
  the index of a verb token in the sentence, and the inner dict should include verbIndex
   (as an integer), and verbInflectedForms.
- 
+
+There is a conversion script that outputs this format of a file under 
+[`qasrl/scripts/utils/prepare_input_file.py`](qasrl/scripts/utils/prepare_input_file.py). 
 
 ### Hyperparameter tuning
 

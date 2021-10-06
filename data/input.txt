@@ -1,0 +1,2 @@
+TQA:T_0058_1	Both occur suddenly.
+TQA:T_0059_0	A landslide happens when a large amount of soil and rock suddenly falls down a slope because of gravity.

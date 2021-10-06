@@ -4,3 +4,5 @@ networkx
 overrides==3.1.0
 scikit-learn==0.22.2
 pytorch-pretrained-bert==0.6.0
+spacy
+lemminflect
